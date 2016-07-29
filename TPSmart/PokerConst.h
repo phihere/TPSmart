@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+
 namespace PokerConst
 {
 	//点数
@@ -23,4 +24,18 @@ namespace PokerConst
 	const static uint8_t FC_Heart = 3;	//红心
 	const static uint8_t FC_Clubs = 2;	//梅花
 	const static uint8_t FC_Diamond = 1; //方块
+}
+
+namespace TPPokerData
+{
+	const static uint8_t T_RoyalFlush = 10;			//皇家同花顺
+	const static uint8_t T_StraightFlush = 9;		//同花顺
+	const static uint8_t T_FourK = 8;				//四条
+	const static uint8_t T_Fullhouse = 7;			//葫芦
+	const static uint8_t T_Flush = 6;				//清一色
+	const static uint8_t T_Straight = 5;			//顺子
+	const static uint8_t T_ThreeK = 4;				//三条
+	const static uint8_t T_TwoPairs = 3;			//两对
+	const static uint8_t T_Pairs = 2;				//一对
+	const static uint8_t T_High = 1;				//高牌
 }
