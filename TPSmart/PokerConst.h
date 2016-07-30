@@ -2,8 +2,10 @@
 
 #include <stdint.h>
 
-namespace PokerConst
+namespace PokerConst//通用poker点数与花色
 {
+	//无效点数
+	const static uint8_t P_0 = 0;
 	//点数
 	const static uint8_t P_2 = 2;
 	const static uint8_t P_3 = 3;
@@ -26,7 +28,7 @@ namespace PokerConst
 	const static uint8_t FC_Diamond = 1; //方块
 }
 
-namespace TPPokerData
+namespace TPPokerData//德扑专用牌型
 {
 	const static uint8_t T_RoyalFlush = 10;			//皇家同花顺
 	const static uint8_t T_StraightFlush = 9;		//同花顺
@@ -38,4 +40,6 @@ namespace TPPokerData
 	const static uint8_t T_TwoPairs = 3;			//两对
 	const static uint8_t T_Pairs = 2;				//一对
 	const static uint8_t T_High = 1;				//高牌
+
+	const static uint8_t T_Zero = 0;				//无效点数
 }

@@ -7,8 +7,8 @@ class PokerInfo
 public:
 	PokerInfo(std::vector<Poker*>& pokerData);
 	~PokerInfo();
-	void setPokerPoint(uint8_t pokerType) { m_pokerType = pokerType; };
-	void setPokerType(uint8_t pokerPoint) { m_pokerPoint = pokerPoint; };
+	void setPokerPoint(uint8_t pokerPoint) { m_pokerPoint = pokerPoint; };
+	void setPokerType(uint8_t pokerType) { m_pokerType = pokerType; };
 	uint8_t	getPokerPoint() { return m_pokerPoint; };
 	uint8_t getPokerType() { return m_pokerType; };
 	const std::vector<Poker*>& getPokerData() { return m_pokerData; };
@@ -43,4 +43,19 @@ public:
 	TPLogic();
 	~TPLogic();
 	PokerInfo checkPokers(std::vector<Poker*>& pokers);
+
+private:
+	//检测皇家同花顺、清一色、顺子，并赋值给pokerinfo
+	void checkFlushAndColor(PokerInfo& pokerinfo);
+
+	//检测金刚到高牌
+	void checkFour2High(PokerInfo& pokerInfo);
+
+	//检测数据是否为合法数据
+	bool checkPokerInfoLegal(const PokerInfo& pokerInfo);
+
+	//将牌型信息归零
+	void clearPokerInfo(PokerInfo& pokerInfo);
+
+	
 };

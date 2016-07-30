@@ -58,10 +58,93 @@ vector<Poker*>	PokerUtil::createNewPokers()
 	return randPokerVec;
 }
 
-void PokerUtil::printPoker(vector<Poker*> pokerVec)
+POKER_DATA_VEC PokerUtil::createNewPokers(std::vector<uint8_t> pokers)
 {
-	for (auto poker:pokerVec)
+	POKER_DATA_VEC	pokerVec;
+	for (auto pokerByte:pokers)
 	{
-		cout << "printPoker===" << poker->getPokerDescription().c_str() << endl;
+		auto poker = new Poker(pokerByte);
+		pokerVec.push_back(poker);
+	}
+	return pokerVec;
+}
+
+void PokerUtil::printPoker(const std::vector<Poker*>& pokerVec,const std::string& des)
+{
+	for (auto poker : pokerVec)
+	{
+		cout << des.c_str() <<"---printPoker==="<< poker->getPokerDescription().c_str() <<"---value==="<<(int)poker->getPokerValue()<<endl;
 	}
 }
+
+void PokerUtil::sortPokerB2SbyNum(std::vector<Poker*>& pokerVec)
+{
+	for (size_t i = 0; i < pokerVec.size(); i++)
+	{
+		for (size_t j = i+1; j < pokerVec.size(); j++)
+		{
+			auto pokeri = pokerVec.at(i);
+			auto pokerj = pokerVec.at(j);
+			if (pokeri->getPokerNum()<pokerj->getPokerNum())
+			{
+				swap(pokerVec[i],pokerVec[j]);
+			}
+		}
+	}
+}
+
+void PokerUtil::sortPokerB2SbyColor(std::vector<Poker*>& pokerVec)
+{
+	for (size_t i = 0; i < pokerVec.size(); i++)
+	{
+		for (size_t j = i + 1; j < pokerVec.size(); j++)
+		{
+			auto pokeri = pokerVec.at(i);
+			auto pokerj = pokerVec.at(j);
+			if (pokeri->getPokerColor()<pokerj->getPokerColor())
+			{
+				swap(pokerVec[i], pokerVec[j]);
+			}
+		}
+	}
+}
+
+POKER_DATA_MAP PokerUtil::getSortPointPokers(std::vector<Poker*>& pokerVec)
+{
+	POKER_DATA_MAP	pokerMap;
+	sortPokerB2SbyNum(pokerVec);
+	POKER_DATA_VEC	tempPokerVec(pokerVec);
+	for (auto poker:pokerVec)
+	{
+		POKER_DATA_MAP::const_iterator	it = pokerMap.find(poker->getPokerNum());
+		POKER_DATA_VEC samePokerVec;
+		if (it != pokerMap.end())//若已存在对应的key，则直接用原有的vec
+		{
+			samePokerVec = it->second;
+		}
+		
+		if (tempPokerVec.empty())
+		{
+			break;
+		}
+		size_t	j = 0;
+		while (tempPokerVec.size()>j)
+		{
+			auto pokerTemp = tempPokerVec[j];
+			if (pokerTemp->getPokerNum() == poker->getPokerNum())
+			{
+				samePokerVec.push_back(pokerTemp);
+				tempPokerVec.erase(tempPokerVec.begin() + j);
+			}
+			else
+			{
+				j++;
+			}
+		}
+		pokerMap.insert(POKER_DATA_PAIR(poker->getPokerNum(), samePokerVec));
+
+	}
+
+	return pokerMap;
+}
+
