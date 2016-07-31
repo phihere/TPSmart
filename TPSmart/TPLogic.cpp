@@ -4,7 +4,7 @@ PokerInfo::PokerInfo(std::vector<Poker*>& pokerData) :
 	m_pokerType(0),
 	m_pokerPoint(0)
 {
-	_ASSERTE(pokerData.size() == 5,"poker count must be equal 5");
+	_ASSERTE(pokerData.size() == 5, "poker count must be equal 5");
 	m_pokerData = pokerData;
 }
 
@@ -26,7 +26,7 @@ TPPlayer::~TPPlayer()
 
 void TPPlayer::addPublicPokers(std::vector<Poker*>& publicPokers)
 {
-	for (auto poker:publicPokers)
+	for (auto poker : publicPokers)
 	{
 		m_publicPokerVec.push_back(poker);
 	}
@@ -43,7 +43,7 @@ TPLogic::~TPLogic()
 
 PokerInfo TPLogic::checkPokers(std::vector<Poker*>& pokers)
 {
-	_ASSERTE(pokers.size()>0);
+	_ASSERTE(pokers.size() > 0);
 	PokerUtil::sortPokerB2SbyNum(pokers);
 	PokerInfo	info(pokers);
 	checkFlushAndColor(info);
@@ -120,7 +120,7 @@ void TPLogic::checkFour2High(PokerInfo & pokerInfo)
 	uint8_t	threeKey = 0;
 	uint8_t twoKey = 0;
 	uint8_t	oneKey = 0;
-	for (POKER_DATA_MAP::const_iterator it = pokerMap.begin(); it != pokerMap.end();++it)
+	for (POKER_DATA_MAP::const_iterator it = pokerMap.begin(); it != pokerMap.end(); ++it)
 	{
 		//利用map中的key升序排列的特性，实际上来说两对与高牌中，最后获取到的key肯定就是该牌型中的最大点数了
 		if (it->second.size() == 4)
@@ -128,7 +128,7 @@ void TPLogic::checkFour2High(PokerInfo & pokerInfo)
 			fourKKey = it->first;
 			fourCardCout++;
 		}
-		else if(it->second.size() == 3)
+		else if (it->second.size() == 3)
 		{
 			threeKey = it->first;
 			threeCardCount++;
@@ -143,7 +143,7 @@ void TPLogic::checkFour2High(PokerInfo & pokerInfo)
 			oneKey = it->first;
 			oneCardCount++;
 		}
-		
+
 	}
 
 	if (fourCardCout)
@@ -152,9 +152,9 @@ void TPLogic::checkFour2High(PokerInfo & pokerInfo)
 		pokerInfo.setPokerPoint(fourKKey);
 		return;
 	}
-	if (threeCardCount>0)
+	if (threeCardCount > 0)
 	{
-		if (twoCardCount>0)
+		if (twoCardCount > 0)
 		{
 			pokerInfo.setPokerType(TPPokerData::T_Fullhouse);
 			pokerInfo.setPokerPoint(threeKey);
@@ -202,5 +202,65 @@ void TPLogic::clearPokerInfo(PokerInfo & pokerInfo)
 {
 	pokerInfo.setPokerPoint(PokerConst::P_0);
 	pokerInfo.setPokerType(TPPokerData::T_Zero);
+}
+
+int TPLogic::comparePokers(const PokerInfo & selfPinfo, const PokerInfo & otherPinfo)
+{
+
+	auto selfP = selfPinfo;
+	auto otherP = otherPinfo;
+	if (selfP.getPokerType() > otherP.getPokerType())
+	{
+		return WIN;
+	}
+	else if (selfP.getPokerType() == otherP.getPokerType())
+	{
+		if (selfP.getPokerPoint() > otherP.getPokerPoint())
+		{
+			return WIN;
+		}
+		else if (selfP.getPokerPoint() < otherP.getPokerPoint())
+		{
+			return LOSE;
+		}
+		//最大点数相同的处理方法
+		switch (selfP.getPokerType())
+		{
+		case TPPokerData::T_FourK:
+		case TPPokerData::T_ThreeK:
+		case TPPokerData::T_Fullhouse:
+		case TPPokerData::T_TwoPairs:
+		case TPPokerData::T_Flush:
+		case TPPokerData::T_Pairs:
+		case TPPokerData::T_High:
+		{
+			auto selfData = selfP.getPokerData();
+			auto otherData = otherP.getPokerData();
+			for (size_t i = 1; i < selfData.size(); i++)
+			{
+				if (selfData[i]->getPokerNum() > otherData[i]->getPokerNum())
+				{
+					return WIN;
+				}
+				else if (selfData[i]->getPokerNum() < otherData[i]->getPokerNum())
+				{
+					return LOSE;
+				}
+				return TIE;//没有输赢就是平手
+			}
+		}
+			break;
+		default://皇家同花顺、同花顺、顺子只需要比本牌型的点数就ok了
+		{
+			if (selfP.getPokerPoint() == otherP.getPokerPoint())
+			{
+				return TIE;
+			}
+		}
+			break;
+		}
+	}
+
+	return LOSE;
 }
 

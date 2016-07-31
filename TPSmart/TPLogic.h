@@ -57,5 +57,17 @@ private:
 	//将牌型信息归零
 	void clearPokerInfo(PokerInfo& pokerInfo);
 
+	//比较两手牌的大小
+	int comparePokers(const PokerInfo& selfPinfo, const PokerInfo& otherPinfo);
+
+private:
+	enum CompareResult
+	{
+		WIN = 1,
+		TIE = 0,
+		LOSE = -1
+
+	};
+
 	
 };

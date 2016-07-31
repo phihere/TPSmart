@@ -93,6 +93,22 @@ void PokerUtil::sortPokerB2SbyNum(std::vector<Poker*>& pokerVec)
 	}
 }
 
+static void sortPokerB2SbyNum(std::vector<uint8_t>& byteVec)
+{
+	for (size_t i = 0; i < byteVec.size(); i++)
+	{
+		for (size_t j = i + 1; j < byteVec.size(); j++)
+		{
+			auto pokeri = byteVec.at(i);
+			auto pokerj = byteVec.at(j);
+			if (pokeri%16 < pokerj%16)
+			{
+				swap(byteVec[i], byteVec[j]);
+			}
+		}
+	}
+}
+
 void PokerUtil::sortPokerB2SbyColor(std::vector<Poker*>& pokerVec)
 {
 	for (size_t i = 0; i < pokerVec.size(); i++)
@@ -109,10 +125,9 @@ void PokerUtil::sortPokerB2SbyColor(std::vector<Poker*>& pokerVec)
 	}
 }
 
-POKER_DATA_MAP PokerUtil::getSortPointPokers(std::vector<Poker*>& pokerVec)
+POKER_DATA_MAP PokerUtil::getSortPointPokers(const std::vector<Poker*>& pokerVec)
 {
 	POKER_DATA_MAP	pokerMap;
-	sortPokerB2SbyNum(pokerVec);
 	POKER_DATA_VEC	tempPokerVec(pokerVec);
 	for (auto poker:pokerVec)
 	{
@@ -146,5 +161,26 @@ POKER_DATA_MAP PokerUtil::getSortPointPokers(std::vector<Poker*>& pokerVec)
 	}
 
 	return pokerMap;
+}
+
+std::vector<std::vector<uint8_t>> PokerUtil::getAllCombination(const std::vector<uint8_t>& NVec, size_t	countM)
+{
+	_ASSERTE(NVec.size() >= countM, "Nvec size must bigger than M!");
+	auto allDataVec = NVec;
+	std::vector<std::vector<uint8_t>>	allCombian;
+	sortPokerB2SbyNum(allDataVec);
+
+	int forCount = 0;
+	/*	std::function<void(std::vector<uint8_t>, rsize_t count)>	func = [&func,&forCount](allpoker)
+	{
+		forCount++;
+		std::vector<uint8_t>	tempData;
+		for (size_t i = 0; i < allPokers.size(); i++)
+		{
+
+		}
+	}*/
+
+	return allCombian;
 }
 
