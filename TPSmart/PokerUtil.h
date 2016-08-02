@@ -6,6 +6,7 @@
 #include <ctime>
 #include <map>
 #include <functional>
+#include <algorithm>
 #include "PokerConst.h"
 
 class Poker
@@ -44,7 +45,7 @@ public:
 
 	//根据点数从大到小排列一手牌
 	static void sortPokerB2SbyNum(std::vector<Poker*>& pokerVec);
-	static void sortPokerB2SbyNum(std::vector<uint8_t>& byteVec);
+	//static void sortPokerB2SbyNum(std::vector<uint8_t>& byteVec);
 
 	//根据颜色从大到小排列一手牌
 	static void sortPokerB2SbyColor(std::vector<Poker*>& pokerVec);

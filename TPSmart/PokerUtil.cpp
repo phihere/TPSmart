@@ -93,21 +93,21 @@ void PokerUtil::sortPokerB2SbyNum(std::vector<Poker*>& pokerVec)
 	}
 }
 
-static void sortPokerB2SbyNum(std::vector<uint8_t>& byteVec)
-{
-	for (size_t i = 0; i < byteVec.size(); i++)
-	{
-		for (size_t j = i + 1; j < byteVec.size(); j++)
-		{
-			auto pokeri = byteVec.at(i);
-			auto pokerj = byteVec.at(j);
-			if (pokeri%16 < pokerj%16)
-			{
-				swap(byteVec[i], byteVec[j]);
-			}
-		}
-	}
-}
+//static void sortPokerB2SbyNum(std::vector<uint8_t>& byteVec)
+//{
+//	for (size_t i = 0; i < byteVec.size(); i++)
+//	{
+//		for (size_t j = i + 1; j < byteVec.size(); j++)
+//		{
+//			auto pokeri = byteVec.at(i);
+//			auto pokerj = byteVec.at(j);
+//			if (pokeri%16 < pokerj%16)
+//			{
+//				swap(byteVec[i], byteVec[j]);
+//			}
+//		}
+//	}
+//}
 
 void PokerUtil::sortPokerB2SbyColor(std::vector<Poker*>& pokerVec)
 {
@@ -168,19 +168,36 @@ std::vector<std::vector<uint8_t>> PokerUtil::getAllCombination(const std::vector
 	_ASSERTE(NVec.size() >= countM, "Nvec size must bigger than M!");
 	auto allDataVec = NVec;
 	std::vector<std::vector<uint8_t>>	allCombian;
-	sortPokerB2SbyNum(allDataVec);
-
-	int forCount = 0;
-	/*	std::function<void(std::vector<uint8_t>, rsize_t count)>	func = [&func,&forCount](allpoker)
+	//sortPokerB2SbyNum(allDataVec);
+	std::vector<uint8_t>	markVec(NVec.size(), 0);
+	for (size_t i = 0; i < countM; i++)
 	{
-		forCount++;
-		std::vector<uint8_t>	tempData;
-		for (size_t i = 0; i < allPokers.size(); i++)
+		markVec[i] = 1;
+	}
+	for (int i = 0; i < NVec.size()-1; i++)
+	{
+		if (markVec[i] == 1 && markVec[i+1] == 0)
 		{
-
+			std::vector<uint8_t>	perCombian;
+			swap(markVec[i], markVec[i + 1]);
+			sort(markVec.begin(), markVec.begin() + i, greater<uint8_t>());
+			for (size_t j = 0; j < markVec.size(); j++)
+			{
+				if (markVec[j] == 1)
+				{
+					cout << "vilible num index====" << j << endl;
+					perCombian.push_back(NVec[j]);
+					if (perCombian.size() == countM)
+					{
+						allCombian.push_back(perCombian);
+						break;
+					}
+				}
+			}
+			i = -1;
 		}
-	}*/
-
+	}
+	cout << "allCombian size====" << allCombian.size() << endl;
 	return allCombian;
 }
 
